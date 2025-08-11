@@ -1,3 +1,3 @@
-print("Hello Script")
-print("Hello WWWWW")
-print('Hello D')
+from textbank import all_text
+
+print(all_text)
