@@ -1,29 +1,22 @@
 from textbank import all_text
-
+print("=== Typing Speed Meter (Batch) ===")
+print("Hi! This program measures your typing speed and accuracy.")
 while True:
   print("\n-- Menu --")
-  print("1. Typing Speed Test 15 Seconds")
-  print("2. Typing Speed Test 30 Seconds")
-  print("3. Typing Speed Test 1 Minute")
-  print("4. Exit Program")
+  print("1. Shuffle a prompt")
+  print("2. Quit")
 
-  choice = input("Please select an option (1-4): ")
+  choice = input("Please select an option (1-2): ")
 
   if choice == "1":
-    print("\n[Typing Speed Test 15 Seconds Starting...]")
-
-    print("[Typing Test Finished! Returning to Menu...]")
+    print("\nPrompt selected:")
+    print("Consistent practice improves both speed and accuracy.")
+    print("\nPress Enter to START timing...")
+    user_input = input("")
+    print("\nType the prompt and press enter to SUBMIT:")
+    user_input = input(">> ")
 
   elif choice == "2":
-    print("\n[Typing Speed Test 30 Seconds Starting...]")
-
-    print("[Typing Test Finished! Returning to Menu...]")
-
-  elif choice == "3":
-    
-    print("[Typing Test Finished! Returning to Menu...]")
-
-  elif choice == "4":
     print("\nExiting Program...")
     break
 
