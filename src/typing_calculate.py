@@ -30,8 +30,6 @@ def calc_wpm_char5(total_chars: int, duration_sec: float) -> float:
     """
     duration_min = max(duration_sec / 60.0, MIN_DURATION / 60.0)
     
-    if duration_min == MIN_DURATION / 60.0:
-      return -1 
     
     return round((total_chars / 5.0) / duration_min, 2)
 
