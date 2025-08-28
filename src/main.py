@@ -47,7 +47,7 @@ while True:
           
       # === Step 4: Calculate results ===
       typing_accuracy = calc_accuracy_pct(correct_count, N)
-      typing_WPM = calc_wpm_char5(N, time_counter)
+      typing_WPM = calc_wpm_char5(length_user_input, time_counter)
       
       # === Step 5: Show summary ===
       print("\n[Result]")
