@@ -1,6 +1,8 @@
 from textbank import all_text   # import sentence dataset
+from typing_calculate import calc_accuracy_pct, calc_wpm_char5
 import random                   # import random for shuffle
 import time
+
 
 print("=== Typing Speed Meter (Batch) ===")
 print("Hi! This program measures your typing speed and accuracy.")
@@ -46,8 +48,17 @@ while True:
         else:
           incorrect_count += 1
           
+      # --- Calculate ---
+      typing_accuracy = calc_accuracy_pct(correct_count, N)
+      typing_WPM = calc_wpm_char5(N, time_counter)
+      
       # --- Show result ---
-      print("\nCorrect:", correct_count, "Incorrect:", incorrect_count, "Time:", time_counter)
+      print("\n[Result]")
+      #print("\nCorrect:", correct_count, "Incorrect:", incorrect_count)
+      print(f"Time: {time_counter:.2f} s")
+      print(f"Accuracy: {typing_accuracy} %")
+      print(f"Words Per Minute (WPM): {typing_WPM}")
+
 
     elif choice == "2":
       print("\nExiting Program...")
