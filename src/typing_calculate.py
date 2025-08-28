@@ -29,21 +29,9 @@ def calc_wpm_char5(total_chars: int, duration_sec: float) -> float:
         float: Words per minute, rounded to two decimals.
     """
     duration_min = max(duration_sec / 60.0, MIN_DURATION / 60.0)
+    
+    if duration_min == MIN_DURATION / 60.0:
+      return -1 
+    
     return round((total_chars / 5.0) / duration_min, 2)
 
-
-def calc_wpm_words(num_words: int, duration_sec: float) -> float:
-    """Calculate Words Per Minute (WPM) using actual word count.
-
-    Formula:
-        WPM = num_words / (duration_sec / 60)
-
-    Args:
-        num_words (int): Number of words typed by the user.
-        duration_sec (float): Time spent typing in seconds.
-
-    Returns:
-        float: Words per minute, rounded to two decimals.
-    """
-    duration_min = max(duration_sec / 60.0, MIN_DURATION / 60.0)
-    return round(num_words / duration_min, 2)
