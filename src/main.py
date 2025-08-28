@@ -1,5 +1,6 @@
 from textbank import all_text   # import sentence dataset
 import random                   # import random for shuffle
+import time
 
 print("=== Typing Speed Meter (Batch) ===")
 print("Hi! This program measures your typing speed and accuracy.")
@@ -21,9 +22,13 @@ while True:
 
       # --- Start typing test ---
       print("\nPress Enter to START timing...")
-      input("")  
+      input("")
+      t0 = time.perf_counter()
+       
       print("Type the prompt and press enter to SUBMIT:")
       user_input = input(">> ")
+      time_counter = time.perf_counter() - t0
+      
       
       # --- Compare characters one by one ---
       correct_count = 0
@@ -42,7 +47,7 @@ while True:
           incorrect_count += 1
           
       # --- Show result ---
-      print("\nCorrect :", correct_count, "Incorrect :", incorrect_count)
+      print("\nCorrect:", correct_count, "Incorrect:", incorrect_count, "Time:", time_counter)
 
     elif choice == "2":
       print("\nExiting Program...")
