@@ -10,12 +10,25 @@ def _module_dir() -> Path:
     return Path(__file__).resolve().parent
 
 def _resolve_json_path() -> Path:
-    # 1) ให้ ENV ชี้พาธได้ (ถ้าตั้ง)
+    # 1) ใช้ ENV ถ้าตั้งไว้
     env = os.getenv("PROMPT_JSON_PATH", "").strip()
     if env:
         return Path(env).expanduser().resolve()
-    # 2) ค่าดีฟอลต์: ใช้ไฟล์ที่วาง "ข้างๆ" โมดูลนี้ใน src/
-    return _module_dir() / "prompts.json"
+
+    # 2) ค่าดีฟอลต์: มองหาใน src/data/prompts.json ก่อน
+    base = _module_dir()  # โฟลเดอร์ที่ไฟล์ prompt_source.py อยู่ (คือ src/)
+    candidates = [
+        base / "data" / "prompts.json",  # ตำแหน่งใหม่
+        base / "prompts.json",           # ตำแหน่งเก่า (เผื่อยังมีอยู่)
+    ]
+
+    for p in candidates:
+        if p.exists():
+            return p.resolve()
+
+    # ถ้าไม่เจอจริง ๆ ให้คืน path ใหม่ (จะได้ error บอกตำแหน่งนี้)
+    return (base / "data" / "prompts.json").resolve()
+
 
 def _normalize_prompts(data, tag_filter: str | None = None) -> list[str]:
     """
