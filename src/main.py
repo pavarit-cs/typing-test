@@ -1,4 +1,4 @@
-from textbank import all_text   # dataset of sentences
+from prompt_source import get_random_prompt   # dataset of sentences
 from typing_calculate import calc_accuracy_pct, calc_wpm_char5  # calculation functions
 import random                   # for random prompt selection
 import time                     # for timing
@@ -18,7 +18,7 @@ while True:
     if choice == "1": 
       # === Step 1: Generate random prompt ===
       print("\nPrompt selected:")
-      random_sentence = random.choice(all_text)
+      random_sentence = get_random_prompt()
       print("   " + random_sentence)
 
       # === Step 2: Start typing test ===
