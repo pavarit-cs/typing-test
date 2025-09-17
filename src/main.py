@@ -1,6 +1,5 @@
 from prompt_source import get_random_prompt   # dataset of sentences
 from typing_calculate import calc_accuracy_pct, calc_wpm_char5  # calculation functions
-import random                   # for random prompt selection
 import time                     # for timing
 
 print("=== Typing Speed Meter (Batch) ===")

@@ -1,90 +1,67 @@
-# prompt_source.py
+# src/prompt_source.py
 import os, json, random
 from pathlib import Path
-
-# (ถ้าอยากใช้ API: pip install requests)
-try:
-    import requests
-except ImportError:
-    requests = None
 
 class PromptSourceError(Exception):
     pass
 
-def _validate_and_pick(data):
-    """รองรับ 2 รูปแบบ: list[str] หรือ {prompts: list[str]}"""
+def _module_dir() -> Path:
+    # โฟลเดอร์ที่ไฟล์นี้อยู่ (เช่น .../project/src)
+    return Path(__file__).resolve().parent
+
+def _resolve_json_path() -> Path:
+    # 1) ให้ ENV ชี้พาธได้ (ถ้าตั้ง)
+    env = os.getenv("PROMPT_JSON_PATH", "").strip()
+    if env:
+        return Path(env).expanduser().resolve()
+    # 2) ค่าดีฟอลต์: ใช้ไฟล์ที่วาง "ข้างๆ" โมดูลนี้ใน src/
+    return _module_dir() / "prompts.json"
+
+def _normalize_prompts(data, tag_filter: str | None = None) -> list[str]:
+    """
+    แปลง JSON หลายรูปแบบ -> list[str] (เฉพาะ 'text')
+      1) list[str]
+      2) {"prompts": list[str]}
+      3) {"schema_version": "...", "prompts": [ {id, text, author?, tags?}, ... ]}
+    """
     if isinstance(data, list):
-        prompts = data
-    elif isinstance(data, dict) and isinstance(data.get("prompts"), list):
-        prompts = data["prompts"]
-    else:
-        raise PromptSourceError("Unsupported JSON format. Expect list or {'prompts': [...]}.")
+        if not all(isinstance(x, str) for x in data):
+            raise PromptSourceError("List format must contain only strings.")
+        return data
 
-    if not prompts:
-        raise PromptSourceError("Empty prompts.")
-    # ตรวจว่าเป็นสตริงล้วน
-    if not all(isinstance(x, str) for x in prompts):
-        raise PromptSourceError("Prompts must be list of strings.")
-    return prompts
+    if isinstance(data, dict):
+        prompts = data.get("prompts")
+        if prompts is None:
+            raise PromptSourceError("Key 'prompts' not found in JSON.")
 
-def load_from_json(path="data/prompts.json"):
-    p = Path(path)
+        if isinstance(prompts, list) and all(isinstance(x, str) for x in prompts):
+            return prompts
+
+        if isinstance(prompts, list) and all(isinstance(x, dict) for x in prompts):
+            items = prompts
+            if tag_filter:
+                k = tag_filter.lower()
+                filtered = [it for it in items
+                            if any(isinstance(t, str) and t.lower() == k for t in (it.get("tags") or []))]
+                if filtered:
+                    items = filtered
+            result = [it.get("text") for it in items if isinstance(it.get("text"), str) and it.get("text").strip()]
+            if not result:
+                raise PromptSourceError("No valid 'text' in prompts array.")
+            return result
+
+    raise PromptSourceError("Unsupported JSON format.")
+
+def load_from_json(path: str | None = None) -> list[str]:
+    p = Path(path).expanduser().resolve() if path else _resolve_json_path()
     if not p.exists():
-        raise PromptSourceError(f"JSON not found: {path}")
+        raise PromptSourceError(f"JSON not found: {p}")
     with p.open(encoding="utf-8") as f:
-        data = json.load(f)
-    return _validate_and_pick(data)
+        raw = json.load(f)
+    tag_filter = os.getenv("PROMPT_TAG", "").strip() or None
+    return _normalize_prompts(raw, tag_filter)
 
-def load_from_api(url, timeout=5):
-    if requests is None:
-        raise PromptSourceError("requests not installed. `pip install requests`")
-    if not url:
-        raise PromptSourceError("PROMPT_API_URL not set.")
-    r = requests.get(url, timeout=timeout)
-    r.raise_for_status()
-    return _validate_and_pick(r.json())
-
-def get_random_prompt():
-    """
-    เลือกแหล่งข้อมูลตาม ENV:
-      PROMPT_SOURCE = 'json' (default) | 'api'
-      PROMPT_JSON_PATH = path ไปยังไฟล์ (default: data/prompts.json)
-      PROMPT_API_URL   = URL ของ API ที่คืน list หรือ {prompts: list}
-    ถ้า API ล่ม จะ fallback เป็น JSON อัตโนมัติ (ถ้ามี)
-    """
-    mode = os.getenv("PROMPT_SOURCE", "json").lower()
-    json_path = os.getenv("PROMPT_JSON_PATH", "data/prompts.json")
-    api_url = os.getenv("PROMPT_API_URL", "")
-
-    prompts = None
-    error_msgs = []
-
-    if mode == "api":
-        try:
-            prompts = load_from_api(api_url)
-        except Exception as e:
-            error_msgs.append(f"[API failed] {e}")
-            # fallback หา JSON ต่อ
-            try:
-                prompts = load_from_json(json_path)
-                error_msgs.append(f"[Fallback to JSON] {json_path}")
-            except Exception as e2:
-                error_msgs.append(f"[JSON failed] {e2}")
-
-    else:  # json mode
-        try:
-            prompts = load_from_json(json_path)
-        except Exception as e:
-            error_msgs.append(f"[JSON failed] {e}")
-            # optional: ถ้าอยากลอง API ต่อ
-            if api_url:
-                try:
-                    prompts = load_from_api(api_url)
-                    error_msgs.append(f"[Fallback to API] {api_url}")
-                except Exception as e2:
-                    error_msgs.append(f"[API failed] {e2}")
-
-    if not prompts:
-        raise PromptSourceError("No prompt source available:\n" + "\n".join(error_msgs))
-
+def get_random_prompt() -> str:
+    # จะอ่าน src/prompts.json โดยอัตโนมัติ (หรือใช้ PROMPT_JSON_PATH ถ้าตั้ง)
+    prompts = load_from_json()
     return random.choice(prompts)
