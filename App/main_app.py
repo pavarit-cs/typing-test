@@ -1,7 +1,7 @@
 import streamlit as st
 import time
 import sys
-sys.path.append(r"D:\projectPY\Typing-Test-CLI\src\typing_test")
+sys.path.append(r"Typing-Test-CLI\src\typing_test")
 from prompt_source import get_random_prompt 
 from typing_calculate import calc_accuracy_pct, calc_wpm_char5 
 
