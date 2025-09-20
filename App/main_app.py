@@ -1,12 +1,13 @@
 import streamlit as st
 import time
-import sys
-#sys.path.append(r"C:\Users\user\Desktop\673380278-9\My project\Typing-Test-CLI\src\typing_test")
+import streamlit.components.v1 as components
 from typing_test.prompt_source import get_random_prompt 
 from typing_test.typing_calculate import calc_accuracy_pct, calc_wpm_char5 
 
 st.set_page_config(page_title="Typing Speed Meter", page_icon="⌨️")
 st.markdown("<h1>Typing Test Master</h1>", unsafe_allow_html=True)
+
+# --- CSS เล็กน้อย ---
 st.markdown("""
 <style>
 div.stButton > button {
@@ -19,15 +20,8 @@ div.stButton > button {
     font-size: 16px ;
     cursor: pointer ;
 }
-
-/* hover effect สวยๆ */
-div.stButton > button:hover {
-    background-color: #5a5a5a ;
-}
-
-div.stTextInput, div.stTextArea, div.stMarkdown {
-    text-align: center;
-}
+div.stButton > button:hover { background-color: #5a5a5a ; }
+div.stTextInput, div.stMarkdown { text-align: center; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -40,6 +34,29 @@ if "user_input" not in st.session_state:
     st.session_state.user_input = ""
 if "results" not in st.session_state:
     st.session_state.results = None
+
+# --- ฟังก์ชัน submit ---
+def submit_typing():
+    t_elapsed = time.perf_counter() - st.session_state.start_time
+    random_sentence = st.session_state.prompt
+    user_input = st.session_state.user_input
+
+    N = max(len(random_sentence), len(user_input))
+    correct_count = sum(
+        1 for i in range(N)
+        if (random_sentence[i] if i < len(random_sentence) else "") ==
+           (user_input[i] if i < len(user_input) else "")
+    )
+
+    typing_accuracy = calc_accuracy_pct(correct_count, N)
+    typing_WPM = calc_wpm_char5(len(user_input), t_elapsed)
+
+    st.session_state.results = {
+        "time": t_elapsed,
+        "accuracy": typing_accuracy,
+        "wpm": typing_WPM
+    }
+    st.rerun()
 
 # --- Show Result ---
 if st.session_state.results:
@@ -55,7 +72,7 @@ if st.session_state.results:
         st.session_state.results = None
         st.rerun()
 
-# --- show Main ---
+# --- Main ---
 else:
     if st.button("Get Prompt"):
         st.session_state.prompt = get_random_prompt()
@@ -73,37 +90,20 @@ else:
                 st.rerun()
         else:
             st.subheader("Typing here")
-            st.session_state.user_input = st.text_area(
-                "",
-                value=st.session_state.user_input,
-                height=100,
-                placeholder="Start typing..."
+            st.text_input(
+                "Type here and press Enter when done:",
+                key="user_input",
+                on_change=submit_typing
             )
-
-            if st.button("Submit"):
-                t_elapsed = time.perf_counter() - st.session_state.start_time
-                random_sentence = st.session_state.prompt
-                user_input = st.session_state.user_input
-
-                correct_count, incorrect_count = 0, 0
-                length_prompt = len(random_sentence)
-                length_user_input = len(user_input)
-                N = max(length_prompt, length_user_input)
-
-                for i in range(N):
-                    p_char = random_sentence[i] if i < length_prompt else ""
-                    u_char = user_input[i] if i < length_user_input else ""
-                    if p_char == u_char:
-                        correct_count += 1
-                    else:
-                        incorrect_count += 1
-
-                typing_accuracy = calc_accuracy_pct(correct_count, N)
-                typing_WPM = calc_wpm_char5(length_user_input, t_elapsed)
-
-                st.session_state.results = {
-                    "time": t_elapsed,
-                    "accuracy": typing_accuracy,
-                    "wpm": typing_WPM
+            components.html(
+                '''
+                <script>
+                const typingInput = window.parent.document.querySelector("input[aria-label='Type here and press Enter when done:']");
+                if (typingInput) {
+                    typingInput.focus();
+                    typingInput.setSelectionRange(typingInput.value.length, typingInput.value.length);
                 }
-                st.rerun()
+                </script>
+                ''',
+                height=0,
+            )
