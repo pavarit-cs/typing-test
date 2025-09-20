@@ -1,0 +1,10 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "typing-test"
+version = "0.1.0"
+
+[project.scripts]
+typing-test = "typing_test.cli:main"

@@ -1,9 +1,9 @@
 import streamlit as st
 import time
 import sys
-sys.path.append(r"Typing-Test-CLI\src\typing_test")
-from prompt_source import get_random_prompt 
-from typing_calculate import calc_accuracy_pct, calc_wpm_char5 
+#sys.path.append(r"C:\Users\user\Desktop\673380278-9\My project\Typing-Test-CLI\src\typing_test")
+from typing_test.prompt_source import get_random_prompt 
+from typing_test.typing_calculate import calc_accuracy_pct, calc_wpm_char5 
 
 st.set_page_config(page_title="Typing Speed Meter", page_icon="⌨️")
 st.markdown("<h1>Typing Test Master</h1>", unsafe_allow_html=True)
