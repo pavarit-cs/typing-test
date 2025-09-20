@@ -54,6 +54,14 @@ python main.py
 
 ---
 
+## Installation(if used streamlit)
+Clone the repo and run:
+
+```bash
+pip install -e .
+
+---
+
 ## 👨‍💻 ผู้พัฒนา (Contributors)
 
 - นายปวริศช์ ประมวล 673380278-9 sec1  
