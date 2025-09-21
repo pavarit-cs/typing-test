@@ -23,25 +23,30 @@
 
 ```bash
 Typing-Test-CLI/
-├── docs/                   # เอกสารประกอบ
-│   ├── PLAN.md             # แผนงาน
-│   └── PROGRESS.md         # บันทึกความคืบหน้า
-│
-├── src/typing_test/        # Source code หลัก (package)
-│   ├── __init__.py
-│   ├── main.py             # CLI entry point
-│   ├── prompt_source.py    # ดึงข้อความจาก JSON
-│   ├── textbank.py         # ข้อความตัวอย่าง
-│   └── typing_calculate.py # ฟังก์ชันคำนวณ accuracy, WPM
-│
+├── .git/                   # git repo ของคุณ
+├── .gitignore              # กำหนดไฟล์ที่ไม่ต้องการ track
 ├── App/
-│   └── main_app.py         # Streamlit web app
+│   └── main_app.py         # Streamlit app
 │
-├── requirements.txt        # dependencies
-├── pyproject.toml          # project config (editable install)
-├── Dockerfile              # ใช้ build image สำหรับ deploy
-├── .gitignore
-└── README.md
+├── docs/                   # เอกสารประกอบ
+│   ├── PLAN.md
+│   └── PROGRESS.md
+│
+├── src/typing_test/        # source code (package)
+│   ├── __init__.py         # ทำให้เป็น package
+│   ├── data/
+│   │   ├── prompts.json
+│   │   └── script_sort_jsonPrompts.py
+│   ├── main.py             # CLI entry point
+│   ├── prompt_source.py
+│   ├── textbank.py
+│   └── typing_calculate.py
+│
+├── requirements.txt        # dependencies (เช่น streamlit)
+├── pyproject.toml          # project config (pip install -e .)
+├── Dockerfile              # build docker image
+└── README.md               # คู่มือโปรเจกต์
+
 ```
 
 ---
