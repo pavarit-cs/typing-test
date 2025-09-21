@@ -1,0 +1,16 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# ติดตั้ง dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# คัดลอกโค้ดทั้งหมด
+COPY . .
+
+# เปิด port 8501 สำหรับ streamlit
+EXPOSE 8501
+
+# ค่าเริ่มต้น: รัน streamlit
+CMD ["streamlit", "run", "App/main_app.py", "--server.port=8501", "--server.address=0.0.0.0"]

@@ -98,3 +98,30 @@ docker build -t typing-test .
 docker run -p 8501:8501 typing-test
 ```
 เปิดเบราว์เซอร์: http://localhost:8501
+
+```
+Typing-Test-CLI
+├─ App
+│  └─ main_app.py
+├─ docs
+│  ├─ PLAN.md
+│  └─ PROGRESS.md
+├─ pyproject.toml
+├─ README.md
+└─ src
+   ├─ typing_test
+   │  ├─ data
+   │  │  ├─ prompts.json
+   │  │  └─ script_sort_jsonPrompts.py
+   │  ├─ main.py
+   │  ├─ prompt_source.py
+   │  ├─ textbank.py
+   │  └─ typing_calculate.py
+   └─ typing_test.egg-info
+      ├─ dependency_links.txt
+      ├─ entry_points.txt
+      ├─ PKG-INFO
+      ├─ SOURCES.txt
+      └─ top_level.txt
+
+```
