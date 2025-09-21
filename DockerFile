@@ -2,15 +2,18 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# ติดตั้ง dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# 1) คัดลอกไฟล์ที่กระทบน้อย เพื่อ cache การติดตั้ง dependencies
+COPY pyproject.toml README.md requirements.txt ./
 
-# คัดลอกโค้ดทั้งหมด
+# 2) ติดตั้ง dependencies พื้นฐาน (ถ้ามีซ้ำกับ pyproject ก็โอเค)
+RUN pip install --no-cache-dir -r requirements.txt || true
+
+# 3) คัดลอกโค้ดที่เหลือ
 COPY . .
 
-# เปิด port 8501 สำหรับ streamlit
+# 4) ติดตั้งโปรเจกต์แบบ editable ที่ root (รู้จัก src-layout จาก pyproject)
+RUN pip install --no-cache-dir -e .
+
 EXPOSE 8501
 
-# ค่าเริ่มต้น: รัน streamlit
 CMD ["streamlit", "run", "App/main_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
