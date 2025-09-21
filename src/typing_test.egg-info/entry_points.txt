@@ -1,2 +1,0 @@
-[console_scripts]
-typing-test = typing_test.cli:main
