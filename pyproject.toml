@@ -5,6 +5,15 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "typing-test"
 version = "0.1.0"
+description = "CLI & Streamlit app for typing speed and accuracy test"
+authors = [
+    { name = "Pavarit Pramual" }
+]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "streamlit"
+]
 
 [project.scripts]
-typing-test = "typing_test.cli:main"
+typing-test = "typing_test.main:main"
