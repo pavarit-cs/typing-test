@@ -57,6 +57,7 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
+The project tracks dependencies in both `requirements.txt` (for quick installs) and `pyproject.toml` (for editable installs). Whenever you add or bump a dependency, update both files and either rerun `pip install -r requirements.txt` or rebuild the Docker image (see below).
 ---
 
 ## Running the CLI
@@ -82,6 +83,27 @@ Open http://localhost:8501 and you will find two tabs:
 - **Statistics** – View aggregated metrics, best records, and the latest sessions.
 
 The Streamlit experience uses the same metrics and persistence layer as the CLI, so all results are shared automatically.
+
+---
+
+## Docker Usage
+You can run the project inside a container if you prefer not to install Python locally. The provided `DockerFile` builds a Streamlit-ready image.
+
+```bash
+# Build the image (rebuild after dependency updates)
+docker build -t typing-test .
+
+# Run the Streamlit UI on http://localhost:8501
+docker run --rm -p 8501:8501 typing-test
+```
+
+To run the CLI inside the container, start an interactive shell:
+```bash
+docker run --rm -it typing-test bash
+python src/typing_test/main.py
+```
+
+Tip: pass environment variables such as `TYPING_STATS_PATH` or `PROMPT_JSON_PATH` with `-e` flags when launching the container if you want to change stats storage or prompt sources.
 
 ---
 
