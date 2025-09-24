@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from datetime import datetime
 import time
-from typing import Any
-
 from prompt_source import get_random_prompt   # dataset of sentences
 from stats_store import (
     append_stat,
@@ -13,6 +11,10 @@ from stats_store import (
     summarize_stats,
 )
 from typing_calculate import calc_accuracy_pct, calc_wpm_char5  # calculation functions
+try:
+    from metrics import compute_metrics
+except ImportError:  # pragma: no cover
+    from typing_test.metrics import compute_metrics  # type: ignore
 
 CHALLENGE_TIME_LIMIT = 30.0  # seconds
 
@@ -34,43 +36,7 @@ def _safe_float(value, digits: int = 2) -> float:
     return 0.0
 
 
-def _compare_text(prompt: str, user_input: str) -> dict[str, Any]:
-  prompt_chars = list(prompt)
-  input_chars = list(user_input)
-  char_total = max(len(prompt_chars), len(input_chars))
-  char_correct = 0
-  char_incorrect = 0
-  for i in range(char_total):
-    p_char = prompt_chars[i] if i < len(prompt_chars) else ""
-    u_char = input_chars[i] if i < len(input_chars) else ""
-    if p_char == u_char:
-      char_correct += 1
-    else:
-      char_incorrect += 1
 
-  prompt_words = prompt.split()
-  input_words = user_input.split()
-  word_total = max(len(prompt_words), len(input_words))
-  word_correct = 0
-  word_incorrect = 0
-  for i in range(word_total):
-    p_word = prompt_words[i] if i < len(prompt_words) else ""
-    u_word = input_words[i] if i < len(input_words) else ""
-    if p_word == u_word:
-      word_correct += 1
-    else:
-      word_incorrect += 1
-
-  return {
-    "char_correct": char_correct,
-    "char_incorrect": char_incorrect,
-    "char_total": char_total,
-    "word_correct": word_correct,
-    "word_incorrect": word_incorrect,
-    "word_total": word_total,
-    "prompt_word_count": len(prompt_words),
-    "input_word_count": len(input_words),
-  }
 
 
 def _run_typing_session(prompt: str, *, mode: str, time_limit: float | None = None) -> bool:
@@ -84,7 +50,7 @@ def _run_typing_session(prompt: str, *, mode: str, time_limit: float | None = No
   user_input = input(">> ")
   time_counter = time.perf_counter() - t0
 
-  metrics = _compare_text(prompt, user_input)
+  metrics = compute_metrics(prompt, user_input)
 
   typing_accuracy = calc_accuracy_pct(metrics["word_correct"], metrics["word_total"])
   typing_WPM = calc_wpm_char5(len(user_input), time_counter)
@@ -225,3 +191,5 @@ while True:
       print("\n(Cancelled) Returning to main menu...\n")
       continue
   
+
+

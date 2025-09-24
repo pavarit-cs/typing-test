@@ -51,5 +51,23 @@
     "word_total": 9,
     "prompt_word_count": 9,
     "input_word_count": 9
+  },
+  {
+    "timestamp": "2025-09-24T18:02:54+00:00",
+    "duration_sec": 27.701,
+    "accuracy_pct": 100.0,
+    "wpm": 22.53,
+    "prompt_length": 51,
+    "input_length": 52,
+    "correct_chars": 51,
+    "incorrect_chars": 1,
+    "prompt": "Only the hand that erases can write the true thing.",
+    "mode": "standard",
+    "char_total": 52,
+    "correct_words": 10,
+    "incorrect_words": 0,
+    "word_total": 10,
+    "prompt_word_count": 10,
+    "input_word_count": 10
   }
 ]
