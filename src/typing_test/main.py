@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 from datetime import datetime
 import time
+from typing import Any
 
 from prompt_source import get_random_prompt   # dataset of sentences
 from stats_store import (
@@ -31,6 +34,45 @@ def _safe_float(value, digits: int = 2) -> float:
     return 0.0
 
 
+def _compare_text(prompt: str, user_input: str) -> dict[str, Any]:
+  prompt_chars = list(prompt)
+  input_chars = list(user_input)
+  char_total = max(len(prompt_chars), len(input_chars))
+  char_correct = 0
+  char_incorrect = 0
+  for i in range(char_total):
+    p_char = prompt_chars[i] if i < len(prompt_chars) else ""
+    u_char = input_chars[i] if i < len(input_chars) else ""
+    if p_char == u_char:
+      char_correct += 1
+    else:
+      char_incorrect += 1
+
+  prompt_words = prompt.split()
+  input_words = user_input.split()
+  word_total = max(len(prompt_words), len(input_words))
+  word_correct = 0
+  word_incorrect = 0
+  for i in range(word_total):
+    p_word = prompt_words[i] if i < len(prompt_words) else ""
+    u_word = input_words[i] if i < len(input_words) else ""
+    if p_word == u_word:
+      word_correct += 1
+    else:
+      word_incorrect += 1
+
+  return {
+    "char_correct": char_correct,
+    "char_incorrect": char_incorrect,
+    "char_total": char_total,
+    "word_correct": word_correct,
+    "word_incorrect": word_incorrect,
+    "word_total": word_total,
+    "prompt_word_count": len(prompt_words),
+    "input_word_count": len(input_words),
+  }
+
+
 def _run_typing_session(prompt: str, *, mode: str, time_limit: float | None = None) -> bool:
   print("\nPress Enter to START timing...")
   if time_limit is not None:
@@ -42,27 +84,19 @@ def _run_typing_session(prompt: str, *, mode: str, time_limit: float | None = No
   user_input = input(">> ")
   time_counter = time.perf_counter() - t0
 
-  correct_count = 0
-  incorrect_count = 0
-  length_prompt = len(prompt)
-  length_user_input = len(user_input)
-  N = max(length_prompt, length_user_input)
+  metrics = _compare_text(prompt, user_input)
 
-  for i in range(N):
-    p_char = prompt[i] if i < length_prompt else ""
-    u_char = user_input[i] if i < length_user_input else ""
-    if p_char == u_char:
-      correct_count += 1
-    else:
-      incorrect_count += 1
-
-  typing_accuracy = calc_accuracy_pct(correct_count, N)
-  typing_WPM = calc_wpm_char5(length_user_input, time_counter)
+  typing_accuracy = calc_accuracy_pct(metrics["word_correct"], metrics["word_total"])
+  typing_WPM = calc_wpm_char5(len(user_input), time_counter)
 
   print("\n[Result]")
   print(f" Time: {time_counter:.2f} s")
-  print(f" Accuracy: {typing_accuracy} %")
+  print(f" Accuracy (word-based): {typing_accuracy} %")
   print(f" Words Per Minute (WPM): {typing_WPM}")
+  if metrics["word_total"] > 0:
+    print(
+      f" Matched words: {metrics['word_correct']} / {metrics['word_total']}"
+    )
 
   if time_limit is not None and time_counter > time_limit:
     print(f" Exceeded the {time_limit:.0f}-second limit. Result not saved.")
@@ -72,12 +106,18 @@ def _run_typing_session(prompt: str, *, mode: str, time_limit: float | None = No
     duration_sec=time_counter,
     accuracy_pct=typing_accuracy,
     wpm=typing_WPM,
-    prompt_length=length_prompt,
-    input_length=length_user_input,
-    correct_chars=correct_count,
-    incorrect_chars=incorrect_count,
+    prompt_length=len(prompt),
+    input_length=len(user_input),
+    correct_chars=metrics["char_correct"],
+    char_total=metrics["char_total"],
+    incorrect_chars=metrics["char_incorrect"],
     prompt=prompt,
     mode=mode,
+    correct_words=metrics["word_correct"],
+    incorrect_words=metrics["word_incorrect"],
+    word_total=metrics["word_total"],
+    prompt_word_count=metrics["prompt_word_count"],
+    input_word_count=metrics["input_word_count"],
   )
   append_stat(record)
   total_sessions = len(load_stats())
@@ -153,9 +193,21 @@ while True:
           prompt_text = (entry.get("prompt") or "").replace("\n", " ")
           if len(prompt_text) > 60:
             prompt_text = prompt_text[:57] + "..."
-          print(
-            f" {ts} | Mode {mode_display} | WPM {wpm_display} | Accuracy {accuracy_display}% | Time {duration_display:.2f}s"
-          )
+          detail_parts = [
+            f"Mode {mode_display}",
+            f"WPM {wpm_display}",
+            f"Accuracy {accuracy_display}%",
+            f"Time {duration_display:.2f}s",
+          ]
+          total_words = entry.get('word_total')
+          if total_words is None:
+            total_words = (entry.get('correct_words') or 0) + (entry.get('incorrect_words') or 0)
+          correct_words = entry.get('correct_words')
+          if total_words and correct_words is not None:
+            detail_parts.append(
+              f"Words {int(correct_words)}/{int(total_words)}"
+            )
+          print(f" {ts} | " + " | ".join(detail_parts))
           if prompt_text:
             print(f"    Prompt: {prompt_text}")
 

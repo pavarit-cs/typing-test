@@ -13,6 +13,7 @@
 - จับเวลาตั้งแต่เริ่มพิมพ์จนจบ
 - คำนวณ **Words Per Minute (WPM)**
 - คำนวณ **Accuracy (%)**
+    - Uses word-by-word comparison for more accurate scoring.
   - Records each CLI session to `stats.json` and lets you review progress via the CLI.
   - 30-second challenge mode for breaking personal records using the last prompt.
 - ตรวจสอบความถูกต้องแบบตัวอักษรต่ออักษร

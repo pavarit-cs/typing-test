@@ -33,5 +33,23 @@
     "incorrect_chars": 49,
     "prompt": "I don't pray really, because I don't want to bore God.",
     "mode": "challenge"
+  },
+  {
+    "timestamp": "2025-09-24T17:46:26+00:00",
+    "duration_sec": 31.0204,
+    "accuracy_pct": 66.67,
+    "wpm": 23.98,
+    "prompt_length": 54,
+    "input_length": 62,
+    "correct_chars": 25,
+    "incorrect_chars": 37,
+    "prompt": "He specialized in the murder of dreams, Hazel Grace...",
+    "mode": "standard",
+    "char_total": 62,
+    "correct_words": 6,
+    "incorrect_words": 3,
+    "word_total": 9,
+    "prompt_word_count": 9,
+    "input_word_count": 9
   }
 ]

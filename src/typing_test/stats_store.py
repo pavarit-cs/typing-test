@@ -18,6 +18,12 @@ class StatRecord(TypedDict, total=False):
     input_length: int
     correct_chars: int
     incorrect_chars: int
+    char_total: int
+    correct_words: int
+    incorrect_words: int
+    word_total: int
+    prompt_word_count: int
+    input_word_count: int
     prompt: str
     mode: str
 
@@ -81,6 +87,12 @@ def create_stat_record(
     incorrect_chars: int,
     prompt: str,
     mode: str | None = None,
+    char_total: int | None = None,
+    correct_words: int | None = None,
+    incorrect_words: int | None = None,
+    word_total: int | None = None,
+    prompt_word_count: int | None = None,
+    input_word_count: int | None = None,
 ) -> StatRecord:
     record: StatRecord = {
         "timestamp": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -95,6 +107,18 @@ def create_stat_record(
     }
     if mode:
         record["mode"] = mode
+    if char_total is not None:
+        record["char_total"] = char_total
+    if correct_words is not None:
+        record["correct_words"] = correct_words
+    if incorrect_words is not None:
+        record["incorrect_words"] = incorrect_words
+    if word_total is not None:
+        record["word_total"] = word_total
+    if prompt_word_count is not None:
+        record["prompt_word_count"] = prompt_word_count
+    if input_word_count is not None:
+        record["input_word_count"] = input_word_count
     return record
 
 
