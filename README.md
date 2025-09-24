@@ -1,140 +1,107 @@
-﻿# Typing Test CLI & Streamlit
+# Typing Test CLI & Streamlit
 
-à¹‚à¸›à¸£à¹à¸à¸£à¸¡ **Typing Test CLI & Web App** à¸ªà¸³à¸«à¸£à¸±à¸šà¸§à¸±à¸”à¸„à¸§à¸²à¸¡à¹€à¸£à¹‡à¸§ (WPM) à¹à¸¥à¸°à¸„à¸§à¸²à¸¡à¹à¸¡à¹ˆà¸™à¸¢à¸³à¹ƒà¸™à¸à¸²à¸£à¸žà¸´à¸¡à¸žà¹Œ  
-- **CLI version**: à¸£à¸±à¸™à¸šà¸™ Command Line  
-- **Streamlit version**: à¸£à¸±à¸™à¹€à¸›à¹‡à¸™à¹€à¸§à¹‡à¸šà¹à¸­à¸›à¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸‡à¹ˆà¸²à¸¢  
-
-à¹‚à¸›à¸£à¹€à¸ˆà¸à¸•à¹Œà¸™à¸µà¹‰à¹€à¸›à¹‡à¸™à¸‡à¸²à¸™ **Mini Project** à¸‚à¸­à¸‡à¸£à¸²à¸¢à¸§à¸´à¸Šà¸² **CP352301 Script Programming** à¸ à¸²à¸„à¹€à¸£à¸µà¸¢à¸™à¸—à¸µà¹ˆ 1 à¸›à¸µà¸à¸²à¸£à¸¨à¸¶à¸à¸©à¸² 2568  
+Typing Test CLI & Streamlit is a small project for measuring typing speed and accuracy from the terminal or a web UI. It was built as part of the CP352301 Script Programming mini project and now includes persistent statistics, a 30-second challenge mode, and improved word-based scoring.
 
 ---
 
-## ðŸ“Œ à¸Ÿà¸µà¹€à¸ˆà¸­à¸£à¹Œ (Features)
-- à¸ªà¸¸à¹ˆà¸¡à¸›à¸£à¸°à¹‚à¸¢à¸„à¸ˆà¸²à¸ `textbank.py` à¸«à¸£à¸·à¸­ `prompts.json`
-- à¸ˆà¸±à¸šà¹€à¸§à¸¥à¸²à¸•à¸±à¹‰à¸‡à¹à¸•à¹ˆà¹€à¸£à¸´à¹ˆà¸¡à¸žà¸´à¸¡à¸žà¹Œà¸ˆà¸™à¸ˆà¸š
-- à¸„à¸³à¸™à¸§à¸“ **Words Per Minute (WPM)**
-- à¸„à¸³à¸™à¸§à¸“ **Accuracy (%)**
-  - Uses word-by-word comparison for more accurate scoring.
-  - Records each CLI session to `stats.json` and lets you review progress via the CLI.
-  - 30-second challenge mode for breaking personal records using the last prompt.
-- à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¸„à¸§à¸²à¸¡à¸–à¸¹à¸à¸•à¹‰à¸­à¸‡à¹à¸šà¸šà¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£à¸•à¹ˆà¸­à¸­à¸±à¸à¸©à¸£
-- à¸£à¸­à¸‡à¸£à¸±à¸š `Ctrl + C` à¹ƒà¸™ CLI à¹€à¸žà¸·à¹ˆà¸­à¸à¸¥à¸±à¸šà¹€à¸¡à¸™à¸¹à¸«à¸¥à¸±à¸
-- (Streamlit) à¸£à¸­à¸‡à¸£à¸±à¸šà¸à¸” **Enter** à¹€à¸žà¸·à¹ˆà¸­à¸ªà¹ˆà¸‡à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸—à¸±à¸™à¸—à¸µ  
+## Features
+- Random prompt selection from `prompts.json`
+- Shared word-by-word accuracy and character-level metrics
+- Words Per Minute (WPM) calculation using the 5-char standard
+- 30-second challenge mode that reuses the last prompt for record attempts
+- Automatic result tracking in `stats.json` with summary and history views
+- Streamlit interface that mirrors the CLI capabilities
+- Graceful handling of `Ctrl+C` in the CLI to return to the menu
 
 ---
 
-## ðŸ“‚ à¹‚à¸„à¸£à¸‡à¸ªà¸£à¹‰à¸²à¸‡à¹‚à¸›à¸£à¹€à¸ˆà¸à¸•à¹Œ (Project Structure)
-
-```bash
+## Project Structure
+```text
 Typing-Test-CLI/
-â”œâ”€â”€ .git/                   # git repo à¸‚à¸­à¸‡à¸„à¸¸à¸“
-â”œâ”€â”€ .gitignore              # à¸à¸³à¸«à¸™à¸”à¹„à¸Ÿà¸¥à¹Œà¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¸•à¹‰à¸­à¸‡à¸à¸²à¸£ track
-â”œâ”€â”€ App/
-â”‚   â””â”€â”€ main_app.py         # Streamlit app
-â”‚
-â”œâ”€â”€ docs/                   # à¹€à¸­à¸à¸ªà¸²à¸£à¸›à¸£à¸°à¸à¸­à¸š
-â”‚   â”œâ”€â”€ PLAN.md
-â”‚   â””â”€â”€ PROGRESS.md
-â”‚
-â”œâ”€â”€ src/typing_test/        # source code (package)
-â”‚   â”œâ”€â”€ __init__.py         # à¸—à¸³à¹ƒà¸«à¹‰à¹€à¸›à¹‡à¸™ package
-â”‚   â”œâ”€â”€ data/
-â”‚   â”‚   â”œâ”€â”€ prompts.json
-â”‚   â”‚   â””â”€â”€ script_sort_jsonPrompts.py
-â”‚   â”œâ”€â”€ main.py             # CLI entry point
-â”‚   â”œâ”€â”€ prompt_source.py
-â”‚   â”œâ”€â”€ textbank.py
-â”‚   â””â”€â”€ typing_calculate.py
-â”‚
-â”œâ”€â”€ requirements.txt        # dependencies (à¹€à¸Šà¹ˆà¸™ streamlit)
-â”œâ”€â”€ pyproject.toml          # project config (pip install -e .)
-â”œâ”€â”€ Dockerfile              # build docker image
-â””â”€â”€ README.md               # à¸„à¸¹à¹ˆà¸¡à¸·à¸­à¹‚à¸›à¸£à¹€à¸ˆà¸à¸•à¹Œ
-
+├─ App/
+│  └─ main_app.py            # Streamlit app
+├─ docs/
+│  ├─ PLAN.md
+│  └─ PROGRESS.md
+├─ src/typing_test/
+│  ├─ data/
+│  │  ├─ prompts.json
+│  │  └─ script_sort_jsonPrompts.py
+│  ├─ __init__.py
+│  ├─ main.py                # CLI entry point
+│  ├─ metrics.py             # Shared typing metrics helper
+│  ├─ prompt_source.py
+│  ├─ stats_store.py         # Stats persistence helpers
+│  ├─ textbank.py
+│  └─ typing_calculate.py
+├─ requirements.txt
+├─ pyproject.toml
+└─ README.md
 ```
 
 ---
 
-## âš™ï¸ à¸§à¸´à¸˜à¸µà¸à¸²à¸£à¸•à¸´à¸”à¸•à¸±à¹‰à¸‡à¹à¸¥à¸°à¹ƒà¸Šà¹‰à¸‡à¸²à¸™ (Installation & Usage)
-1. Clone project
+## Installation
 ```bash
 git clone https://github.com/pavarit548x/Typing-Test-CLI.git
 cd Typing-Test-CLI
-```
-2. (à¹à¸™à¸°à¸™à¸³) à¸ªà¸£à¹‰à¸²à¸‡ virtual environment
-```bash
+
 python -m venv .venv
-source .venv/bin/activate   # macOS/Linux
-.venv\Scripts\activate      # Windows
-```
-3. à¸•à¸´à¸”à¸•à¸±à¹‰à¸‡ dependencies
-```bash
+# Windows
+.venv\Scripts\activate
+# macOS / Linux
+source .venv/bin/activate
+
 pip install -r requirements.txt
-```
-à¸–à¹‰à¸²à¸­à¸¢à¸²à¸à¹ƒà¸«à¹‰à¹‚à¸„à¹‰à¸” import à¹„à¸”à¹‰à¸—à¸¸à¸à¸—à¸µà¹ˆ à¹ƒà¸Šà¹‰ editable mode:
-```bash
+# or install the package in editable mode
 pip install -e .
 ```
 
 ---
 
-## â–¶ï¸ Run CLI version
+## Running the CLI
 ```bash
 python src/typing_test/main.py
 ```
-à¹€à¸¡à¸™à¸¹:
+Menu options:
+- `1` – Normal mode (shuffle a new prompt)
+- `2` – 30-second challenge mode using the last prompt
+- `3` – View saved statistics
+- `4` – Quit
 
-* à¸à¸” 1 â†’ à¹‚à¸«à¸¡à¸”à¸›à¸à¸•à¸´ (à¸ªà¸¸à¹ˆà¸¡à¸›à¸£à¸°à¹‚à¸¢à¸„à¹ƒà¸«à¸¡à¹ˆ)
-* à¸à¸” 2 â†’ à¹‚à¸«à¸¡à¸”à¸—à¸³à¸¥à¸²à¸¢à¸ªà¸–à¸´à¸•à¸´ 30 à¸§à¸´ (à¹ƒà¸Šà¹‰à¸›à¸£à¸°à¹‚à¸¢à¸„à¹€à¸”à¸´à¸¡à¸¥à¹ˆà¸²à¸ªà¸¸à¸”)
-* à¸à¸” 3 â†’ à¸”à¸¹à¸ªà¸–à¸´à¸•à¸´à¸—à¸µà¹ˆà¸šà¸±à¸™à¸—à¸¶à¸à¹„à¸§à¹‰
-* à¸à¸” 4 â†’ à¸­à¸­à¸à¸ˆà¸²à¸à¹‚à¸›à¸£à¹à¸à¸£à¸¡
-
+The CLI measures your typing session, reports WPM and word-based accuracy, and stores the result in `stats.json` unless the 30-second timer expires in challenge mode.
 
 ---
 
-## ðŸŒ Run Streamlit version
+## Running the Streamlit App
 ```bash
 streamlit run App/main_app.py
 ```
-à¹€à¸›à¸´à¸”à¹€à¸šà¸£à¸²à¸§à¹Œà¹€à¸‹à¸­à¸£à¹Œà¸—à¸µà¹ˆ http://localhost:8501
+Open http://localhost:8501 and you will find two tabs:
+- **Typing** – Run either the normal or 30-second challenge mode. Results show matched words, accuracy, elapsed time, and WPM.
+- **Statistics** – View aggregated metrics, best records, and the latest sessions.
+
+The Streamlit experience uses the same metrics and persistence layer as the CLI, so all results are shared automatically.
 
 ---
 
-## ðŸ³ Run with Docker
-1. Build image
-```bash
-docker build -t typing-test .
-```
-2. Run container
-```bash
-docker run -p 8501:8501 typing-test
-```
-à¹€à¸›à¸´à¸”à¹€à¸šà¸£à¸²à¸§à¹Œà¹€à¸‹à¸­à¸£à¹Œ: http://localhost:8501
+## Typing Statistics
+- Results are stored in `src/typing_test/data/stats.json` by default.
+- Set the `TYPING_STATS_PATH` environment variable to choose a custom location.
+- The statistics viewer summarises averages, best records, and recent sessions, including matched word counts.
 
-```
-Typing-Test-CLI
-â”œâ”€ App
-â”‚  â””â”€ main_app.py
-â”œâ”€ docs
-â”‚  â”œâ”€ PLAN.md
-â”‚  â””â”€ PROGRESS.md
-â”œâ”€ pyproject.toml
-â”œâ”€ README.md
-â””â”€ src
-   â”œâ”€ typing_test
-   â”‚  â”œâ”€ data
-   â”‚  â”‚  â”œâ”€ prompts.json
-   â”‚  â”‚  â””â”€ script_sort_jsonPrompts.py
-   â”‚  â”œâ”€ main.py
-   â”‚  â”œâ”€ prompt_source.py
-   â”‚  â”œâ”€ textbank.py
-   â”‚  â””â”€ typing_calculate.py
-   â””â”€ typing_test.egg-info
-      â”œâ”€ dependency_links.txt
-      â”œâ”€ entry_points.txt
-      â”œâ”€ PKG-INFO
-      â”œâ”€ SOURCES.txt
-      â””â”€ top_level.txt
+---
 
-```
+## Prompt Configuration
+By default prompts are loaded from `src/typing_test/data/prompts.json`. You can customise this behaviour with environment variables:
+- `PROMPT_JSON_PATH` – Absolute or relative path to an alternate JSON file
+- `PROMPT_TAG` – Filter prompts by tag when using the structured JSON schema
 
+---
 
+## Keyboard Shortcuts & Tips
+- Press `Ctrl+C` in the CLI at any time to cancel the current action and return to the menu safely.
+- In the Streamlit app, use `Enter` (or `Ctrl+Enter`) in the text area to submit the prompt immediately.
+- Challenge mode only saves results that finish within 30 seconds, helping you focus on personal best runs.
+
+Enjoy improving your typing speed!
