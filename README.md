@@ -13,6 +13,7 @@
 - จับเวลาตั้งแต่เริ่มพิมพ์จนจบ
 - คำนวณ **Words Per Minute (WPM)**
 - คำนวณ **Accuracy (%)**
+  - Records each CLI session to `stats.json` and lets you review progress via the CLI.
 - ตรวจสอบความถูกต้องแบบตัวอักษรต่ออักษร
 - รองรับ `Ctrl + C` ใน CLI เพื่อกลับเมนูหลัก
 - (Streamlit) รองรับกด **Enter** เพื่อส่งข้อความทันที  
@@ -82,6 +83,10 @@ python src/typing_test/main.py
 
 * กด 1 → เริ่มทดสอบ
 * กด 2 → ออกจากโปรแกรม
+  * Option 1 - Run a new typing test
+  * Option 2 - Review saved statistics
+  * Option 3 - Quit the CLI
+
 
 ---
 

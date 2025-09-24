@@ -1,0 +1,13 @@
+[
+  {
+    "timestamp": "2025-09-24T17:04:37+00:00",
+    "duration_sec": 27.3344,
+    "accuracy_pct": 100.0,
+    "wpm": 24.15,
+    "prompt_length": 55,
+    "input_length": 55,
+    "correct_chars": 55,
+    "incorrect_chars": 0,
+    "prompt": "Success is an inner energy only winners can release it."
+  }
+]
