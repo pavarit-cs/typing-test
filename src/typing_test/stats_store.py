@@ -19,6 +19,7 @@ class StatRecord(TypedDict, total=False):
     correct_chars: int
     incorrect_chars: int
     prompt: str
+    mode: str
 
 
 def _package_dir() -> Path:
@@ -79,8 +80,9 @@ def create_stat_record(
     correct_chars: int,
     incorrect_chars: int,
     prompt: str,
+    mode: str | None = None,
 ) -> StatRecord:
-    return {
+    record: StatRecord = {
         "timestamp": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "duration_sec": round(duration_sec, 4),
         "accuracy_pct": round(accuracy_pct, 2),
@@ -91,6 +93,9 @@ def create_stat_record(
         "incorrect_chars": incorrect_chars,
         "prompt": prompt,
     }
+    if mode:
+        record["mode"] = mode
+    return record
 
 
 def summarize_stats(records: Sequence[StatRecord]) -> dict[str, float | int | str | None]:

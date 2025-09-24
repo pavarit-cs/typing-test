@@ -9,5 +9,29 @@
     "correct_chars": 55,
     "incorrect_chars": 0,
     "prompt": "Success is an inner energy only winners can release it."
+  },
+  {
+    "timestamp": "2025-09-24T17:28:28+00:00",
+    "duration_sec": 24.6042,
+    "accuracy_pct": 50.91,
+    "wpm": 26.82,
+    "prompt_length": 54,
+    "input_length": 55,
+    "correct_chars": 28,
+    "incorrect_chars": 27,
+    "prompt": "I don't pray really, because I don't want to bore God.",
+    "mode": "standard"
+  },
+  {
+    "timestamp": "2025-09-24T17:29:38+00:00",
+    "duration_sec": 28.4656,
+    "accuracy_pct": 9.26,
+    "wpm": 22.34,
+    "prompt_length": 54,
+    "input_length": 53,
+    "correct_chars": 5,
+    "incorrect_chars": 49,
+    "prompt": "I don't pray really, because I don't want to bore God.",
+    "mode": "challenge"
   }
 ]

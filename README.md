@@ -14,6 +14,7 @@
 - คำนวณ **Words Per Minute (WPM)**
 - คำนวณ **Accuracy (%)**
   - Records each CLI session to `stats.json` and lets you review progress via the CLI.
+  - 30-second challenge mode for breaking personal records using the last prompt.
 - ตรวจสอบความถูกต้องแบบตัวอักษรต่ออักษร
 - รองรับ `Ctrl + C` ใน CLI เพื่อกลับเมนูหลัก
 - (Streamlit) รองรับกด **Enter** เพื่อส่งข้อความทันที  
@@ -81,11 +82,10 @@ python src/typing_test/main.py
 ```
 เมนู:
 
-* กด 1 → เริ่มทดสอบ
-* กด 2 → ออกจากโปรแกรม
-  * Option 1 - Run a new typing test
-  * Option 2 - Review saved statistics
-  * Option 3 - Quit the CLI
+* กด 1 → โหมดปกติ (สุ่มประโยคใหม่)
+* กด 2 → โหมดทำลายสถิติ 30 วิ (ใช้ประโยคเดิมล่าสุด)
+* กด 3 → ดูสถิติที่บันทึกไว้
+* กด 4 → ออกจากโปรแกรม
 
 
 ---
